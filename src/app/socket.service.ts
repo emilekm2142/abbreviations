@@ -1,19 +1,21 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import {EventEmitter, Injectable, isDevMode, Output} from '@angular/core';
 
 import * as socketIo from 'socket.io-client';
 import {Room} from './models/Room';
 import {Router} from '@angular/router';
 
-const SERVER_URL = 'https://0.0.0.0';
+let SERVER_URL = 'https://0.0.0.0';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
+
   public socket;
   public rooms: Room[] = [];
   @Output() roomUpdated: EventEmitter<any> = new EventEmitter();
   constructor(private router: Router) {
+    SERVER_URL = isDevMode() ? 'localhost:8080' : 'https://abbreviation.herokuapp.com';
     this.initSocket();
   }
   public initSocket(): void {
