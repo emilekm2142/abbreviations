@@ -111,7 +111,7 @@ class Room {
 let distDir = __dirname + '/dist/';
 app.use(express.static(distDir));
 
-http.listen(8080);
+http.listen(process.env.PORT || 8080);
 let players: Player[] = [];
 let rooms: Room[] = [];
 

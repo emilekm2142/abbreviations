@@ -88,7 +88,7 @@ var Room = /** @class */ (function () {
 }());
 var distDir = __dirname + '/dist/';
 app.use(express.static(distDir));
-http.listen(8080);
+http.listen(process.env.PORT || 8080);
 var players = [];
 var rooms = [];
 function randomHash() {

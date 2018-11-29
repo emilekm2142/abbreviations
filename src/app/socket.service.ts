@@ -3,10 +3,8 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import * as socketIo from 'socket.io-client';
 import {Room} from './models/Room';
 import {Router} from '@angular/router';
-import {PlayerService} from './player.service';
-import {Player} from './models/Player';
 
-const SERVER_URL = 'http://localhost:8080';
+const SERVER_URL = 'https://0.0.0.0';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +12,7 @@ const SERVER_URL = 'http://localhost:8080';
 export class SocketService {
   public socket;
   public rooms: Room[] = [];
-  @Output() roomUpdated:EventEmitter<any> = new EventEmitter()
+  @Output() roomUpdated: EventEmitter<any> = new EventEmitter();
   constructor(private router: Router) {
     this.initSocket();
   }
