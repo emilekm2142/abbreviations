@@ -1,6 +1,7 @@
-<mat-card mat-ripple [routerLink]="['/room', room.hash]" class="element" *ngFor="let room of rooms">
+<mat-card *ngFor="let room of rooms | roomFilter: filter | slice: start:end" [routerLink]="['/room', room.hash]"
+          class="element" mat-ripple>
 
-  <mat-card-header> <h4>{{room.name}}</h4> </mat-card-header>
+  <mat-card-header [class.disabled]="room.players.length == room.maxPlayers"><h4>{{room.name}}</h4></mat-card-header>
     <mat-card-content>
       <span>{{room.state}}</span>
       <span>Click to join</span><br>

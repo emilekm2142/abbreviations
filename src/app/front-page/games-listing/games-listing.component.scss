@@ -6,3 +6,9 @@
 .element:hover{
   transform: scale(1.02);
 }
+
+.disabled {
+  pointer-events: none !important;
+  cursor: default !important;
+  opacity: 0.2;
+}

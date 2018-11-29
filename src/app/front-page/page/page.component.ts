@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PlayerService} from '../../player.service';
 import {SocketService} from '../../socket.service';
 import {animate, style, transition, trigger} from '@angular/animations';
@@ -38,6 +38,12 @@ import {Router} from '@angular/router';
 export class PageComponent implements OnInit {
   changingName = false;
   creator = false;
+  filter = '';
+  pageEvent = {
+    length: this.rooms.length,
+    pageSize: 25,
+    pageIndex: 0
+  };
   get playerAmount(): number {
     return this.rooms.reduce((prev, n) => prev + n.players.length, 0);
   }
@@ -52,8 +58,9 @@ export class PageComponent implements OnInit {
   ngOnInit() {
     this.socketService.socket.disconnect();
     this.socketService.initSocket();
-    if (this.playerService.name)
+    if (this.playerService.name) {
     this.playerService.initName();
+    }
 
   }
 refresh() {

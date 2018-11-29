@@ -10,6 +10,9 @@ import {SocketService} from '../../socket.service';
 export class GamesListingComponent implements OnInit {
   @Input() games:Room[];
   @Input() clickable=true;
+  @Input() filter: string;
+  @Input() start: number = 0;
+  @Input() end: number = 10000;
   constructor(private socketS:SocketService) { }
   ngOnInit() {
   }

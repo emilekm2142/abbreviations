@@ -17,11 +17,29 @@
 </mat-card>
 <mat-card style="margin-top:1em;">
     <mat-card-content>
-      {{rooms.length}} rooms, {{playerAmount}} players <button (click)="refresh()" mat-icon-button>
-      <mat-icon aria-label="Example icon-button with a heart icon">refresh</mat-icon>
-    </button>
+      <div class="flex">
+        <div class="left-flex">
+          {{rooms.length}} rooms, {{playerAmount}} players
+          <button (click)="refresh()" mat-icon-button>
+            <mat-icon aria-label="Example icon-button with a heart icon">refresh</mat-icon>
+          </button>
+        </div>
+        <div class="right-flex">
+          <div class="flex">
+            <mat-form-field><input matInput [(ngModel)]="filter" placeholder="search by name"></mat-form-field>
+            <mat-paginator *ngIf="rooms.length>4" style="margin-left:3em;" [length]="rooms.length"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25]"
+                           (page)="pageEvent = $event">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+
       <div *ngIf="rooms.length==0">Since there are no public games, what about <a href="#" (click)="creator=true">creating one?</a></div>
     </mat-card-content>
   </mat-card>
-<app-games-listing class="listing" [games]="rooms" [clickable]="true"></app-games-listing>
+  <app-games-listing [start]="pageEvent.pageSize * pageEvent.pageIndex"
+                     [end]="pageEvent.pageSize * (pageEvent.pageIndex+1)" [filter]="filter" class="listing"
+                     [games]="rooms" [clickable]="true"></app-games-listing>
 </section>
