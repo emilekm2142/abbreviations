@@ -1,6 +1,6 @@
-let express = require('express');
-let app = express();
-var http = require('http').createServer(handler);
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
 let fs = require('fs');
 let chance = require('chance').Chance();
 

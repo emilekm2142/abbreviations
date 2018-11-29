@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var http = require('http').createServer(handler);
+var http = require('http').Server(app);
 var fs = require('fs');
 var chance = require('chance').Chance();
 var io_server = require('socket.io')(http);
