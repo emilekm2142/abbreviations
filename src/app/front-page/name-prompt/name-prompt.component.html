@@ -1,0 +1,12 @@
+
+  <div  class="background-white">
+<div  class="container mat-typography">
+  <h3>Hi! It is nice to see a new player! What is your name?</h3>
+  <mat-form-field class="full-width input">
+    <input [(ngModel)]="nameInput" (input)="onInput()" matInput placeholder="My name is..." (keyup.enter)="applyName()">
+  </mat-form-field>
+  <button [@btnAnimation] *ngIf="nameInput.length>=2" class="full-width btn" mat-stroked-button color="primary" (click)="applyName()">Ok</button>
+</div>
+
+</div>
+

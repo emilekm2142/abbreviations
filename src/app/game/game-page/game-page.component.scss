@@ -1,0 +1,49 @@
+.container{
+  width:80%;
+  max-width: 1700px;
+  margin:auto;
+}
+.full-width{
+  width:100%;
+}
+@keyframes flickerAnimation { /* flame pulses */
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+.animate-flicker {
+  opacity:1;
+  animation: flickerAnimation 2s infinite;
+}
+.solution-card{
+  transition:0.2s;
+  margin:20px;
+  width:120px;
+  min-height:100px;
+}
+.solution-card:hover{
+  transform: scale(1.02);
+}
+.solution-cards{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.form-with-button{
+  width:98%;
+  margin:auto;
+  padding:10px;
+  display:flex;
+  flex-direction: row;
+
+
+}
+.center{
+  position: relative;
+}
+.lost{
+  opacity: 0.1;
+}
+.win{
+  transform: scale(1.1);
+}

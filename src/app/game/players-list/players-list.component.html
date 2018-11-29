@@ -1,0 +1,21 @@
+<div class="player" [class.me-container]="player.id==me.id" *ngFor="let player of players">
+  <div class="left">
+  <span [class.me]="player.id==me.id"  >{{player.name}}</span> <mat-chip  class="info-chip" color="primary">{{player.points}}</mat-chip>
+  </div>
+  <div class="right">
+    <mat-chip-list>
+      <span *ngIf="player.sentSolution && room.state===State.typing">
+        <mat-chip selected color="primary"><mat-icon>check</mat-icon></mat-chip>
+      </span>
+      <span *ngIf="room.state===State.notStarted">
+
+        <mat-chip (click)="makeReady()" *ngIf="!player.ready" color="accent">Unready</mat-chip>
+        <mat-chip selected *ngIf="player.ready" color="primary">Ready</mat-chip>
+      </span>
+      <mat-chip  selected *ngIf="player.isAdmin" color="primary">Admin</mat-chip>
+      <mat-chip  selected *ngIf="player.isCzar" color="accent">Czar</mat-chip>
+      <span *ngIf="me.isAdmin"> <button  *ngIf="player.name!==me.name" mat-button color="warn">Kick</button></span>
+    </mat-chip-list>
+
+  </div>
+</div>

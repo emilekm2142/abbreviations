@@ -1,0 +1,40 @@
+<app-name-prompt style="z-index:5;position:relative" [@enterAnimation]  *ngIf="!name"></app-name-prompt>
+<section class="container" *ngIf="room && me">
+  <mat-card>
+    <mat-card-header>
+      <h1>{{room.name}}</h1>
+    </mat-card-header>
+    <mat-card-content>
+      <button (click)="makeReady()" [@enterAnimation] style="width:100%" color="accent" mat-flat-button *ngIf="!me.ready">Get ready to start!</button>
+      <app-players-list [players]="room.players" [room]="room"></app-players-list>
+
+    </mat-card-content>
+  </mat-card>
+  <mat-card [@enterAnimation] *ngIf="me.isAdmin && room.state == State.notStarted" style="margin-top:1em;">
+    <button (click)="start()" class="full-width" mat-button color="primary" [disabled]="!isEveryoneReady">Start!</button>
+  </mat-card>
+  <mat-card [@enterAnimation] *ngIf="me.isCzar && room.state !== State.choosing">
+    <div [@enterAnimation]  *ngIf="room.state === State.czarTurn">
+      <div class="form-with-button"><mat-form-field class="full-width"> <input matInput class="full-width" [(ngModel)]="task" placeholder="An abbreviation to expand">  </mat-form-field><button (click)="getRandom()" mat-button>Random</button></div>
+      <button (click)="setTask()" class="full-width" mat-button color="primary" [disabled]="task.length < 1">Send</button>
+    </div>
+    <div [@enterAnimation] *ngIf="room.state===State.typing">
+      <h3 style="text-align: center;width:100%" class="animate-flicker">Waiting for players...</h3>
+    </div>
+
+  </mat-card>
+  <mat-card [@enterAnimation] *ngIf="!me.isCzar && room.state===State.czarTurn">
+    <h3 style="text-align: center;width:100%" class="animate-flicker">Waiting for czar...</h3>
+  </mat-card>
+  <div class="solution-cards center" *ngIf="room.state === State.choosing">
+    <mat-card [@enterAnimation]  [class.lost]="!solution.win && choosen" [class.win]="solution.win && choosen" class="solution-card" mat-ripple (click)="choose(solution.temporalHash)" *ngFor="let solution of room.propositions">
+      {{solution.solution}}
+    </mat-card>
+  </div>
+  <mat-card [@enterAnimation] *ngIf="!me.isCzar && room.state === State.typing">
+    <h2 style="text-align: center;width:100%">{{room.currentAbbreviation}}</h2>
+    <mat-form-field class="full-width" > <input matInput class="full-width" placeholder="solution" [(ngModel)]="solution"></mat-form-field>
+    <button (click)="setSolution()" class="full-width" mat-button color="primary" [disabled]="solution.length < 1">Send</button>
+  </mat-card>
+
+</section>

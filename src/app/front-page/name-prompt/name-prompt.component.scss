@@ -1,0 +1,34 @@
+.container{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  width:70%;
+
+}
+.container h3 {
+  text-align: center;
+  display: none;
+}
+.background-white{
+  width:100%;
+  height:100%;
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:5;
+  background-color: white;
+}
+.full-width{
+  width:100%;
+  font-size:2em;
+
+}
+.full-width.btn{
+  font-size:1em;
+  position: absolute;
+  top: 7em;
+  transform: translateX(-100%);
+}
+

@@ -1,0 +1,27 @@
+<app-name-prompt style="z-index:5;position:relative" [@enterAnimation]  *ngIf="!name || changingName"></app-name-prompt>
+<!--- no to jest ciekawe, z-index jest zmieniany przez animację i trzeba było dac relative -->
+
+
+<section class="container">
+<mat-card>
+  <mat-card-header>
+    <h1>Hi! {{name}}</h1>
+  </mat-card-header>
+  <mat-card-content>
+    <p mat-ripple style="cursor:pointer; color:#303F9F" (click)="creator=!creator">Create new game <button mat-icon-button>
+      <mat-icon aria-label="Example icon-button with a heart icon">expand_more</mat-icon>
+    </button></p>
+    <app-game-creator  *ngIf="creator" style="display:block; overflow:hidden" [@slide] ></app-game-creator>
+
+  </mat-card-content>
+</mat-card>
+<mat-card style="margin-top:1em;">
+    <mat-card-content>
+      {{rooms.length}} rooms, {{playerAmount}} players <button (click)="refresh()" mat-icon-button>
+      <mat-icon aria-label="Example icon-button with a heart icon">refresh</mat-icon>
+    </button>
+      <div *ngIf="rooms.length==0">Since there are no public games, what about <a href="#" (click)="creator=true">creating one?</a></div>
+    </mat-card-content>
+  </mat-card>
+<app-games-listing class="listing" [games]="rooms" [clickable]="true"></app-games-listing>
+</section>
