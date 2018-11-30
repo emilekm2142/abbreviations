@@ -220,11 +220,12 @@ io_server.on('connection', function (socket) {
         for (var i = 0; i < d; i++) {
             x += chance.syllable();
         }
-        callback(x);
+        callback(x.toUpperCase());
     });
     socket.on('sendSolution', function (d) {
         var solution = d.solution;
         var player = Player.getPlayer(players, socket.id);
+        console.log(JSON.stringify(rooms));
         var room = Room.getRoomWithPlayer(rooms, socket.id);
         if (room.state === State.typing) {
             // if the first sent solutoion

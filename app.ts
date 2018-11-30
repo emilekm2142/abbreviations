@@ -253,11 +253,12 @@ io_server.on('connection', function (socket) {
     for (let i = 0; i < d; i++) {
       x += chance.syllable();
     }
-    callback(x);
+    callback(x.toUpperCase());
   });
   socket.on('sendSolution', (d) => {
     const solution = d.solution;
     const player = Player.getPlayer(players, socket.id);
+    console.log(JSON.stringify(rooms));
     const room = Room.getRoomWithPlayer(rooms, socket.id);
     if (room.state === State.typing) {
       // if the first sent solutoion
