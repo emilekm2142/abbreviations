@@ -15,7 +15,7 @@ export class SocketService {
   public rooms: Room[] = [];
   @Output() roomUpdated: EventEmitter<any> = new EventEmitter();
   constructor(private router: Router) {
-    SERVER_URL = isDevMode() ? 'http://localhost:80' : 'https://abbreviation.herokuapp.com';
+    SERVER_URL = isDevMode() ? '' : 'https://abbreviation.herokuapp.com';
     this.initSocket();
   }
   public initSocket(): void {
