@@ -4,7 +4,9 @@ var app = express();
 
 let distDir = __dirname + '/dist/';
 app.use(express.static(distDir));
-
+app.get('*', function(req, res) {
+  res.sendfile(distDir+"index.html");
+});
 var server = app.listen(process.env.PORT || 80);
 let fs = require('fs');
 let chance = require('chance').Chance();
