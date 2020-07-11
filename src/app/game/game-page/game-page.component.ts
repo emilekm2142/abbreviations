@@ -8,7 +8,10 @@ import {PlayerService} from '../../player.service';
 import {State} from '../../models/State';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {MatButton} from '@angular/material';
-
+class ChatMessage{
+  player:string;
+  msg:string;
+}
 @Component({
   selector: 'app-game-page',
   templateUrl: './game-page.component.html',
@@ -28,10 +31,22 @@ import {MatButton} from '@angular/material';
     )]
 })
 export class GamePageComponent implements OnInit {
+  lastChatMessageTime:number = Date.now();
+  chat:ChatMessage[]=[]
   task = '';
   solution = '';
   id;
+  chatMsg:string;
+  sendChat(){
+    if (this.chatMsg)
+    this.s.socket.emit("chat", {player:this.pS.name, msg:this.chatMsg}, (d)=>{});
+    this.chatMsg = "";
+    this.lastChatMessageTime = this.now;
+  }
   choosen = false;
+  get now(){
+    return Date.now();
+  }
   get me () {
     return this.pS.me;
   }
@@ -47,11 +62,13 @@ export class GamePageComponent implements OnInit {
   ngOnInit() {
 
     this.id = this.route.snapshot.paramMap.get('room');
-    this.s.joinRoom(this.id, (d) => {
-      console.log(d);
-      this.room = d;
+    if (this.pS.name) {
+      this.s.joinRoom(this.id, (d) => {
+        console.log(d);
+        this.room = d;
 
-    });
+      });
+    }
     this.s.socket.on('preChoose', (data) => {
       this.choosen = true;
       for (const x of this.room.propositions) {  x.win = (x.temporalHash === data.temporalHash); }
@@ -67,6 +84,9 @@ export class GamePageComponent implements OnInit {
       } else {
         this.pS.me = this.room.players.filter(d => d.id === this.me.id)[0];
       }
+    });
+    this.s.socket.on("chatMessage", (data)=>{
+        this.chat.push(data);
     });
     this.s.roomUpdated.subscribe(() => {
 

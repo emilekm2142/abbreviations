@@ -1,10 +1,25 @@
 var express = require('express');
+var cors = require('cors')
 var app = express();
-var http = require('http').Server(app);
+
+let distDir = __dirname + '/dist/';
+app.use(express.static(distDir));
+
+var server = app.listen(process.env.PORT || 80);
 let fs = require('fs');
 let chance = require('chance').Chance();
 
-let io_server = require('socket.io')(http);
+let io_server = require("socket.io")(server, {
+  handlePreflightRequest: (req, res) => {
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+      "Access-Control-Allow-Credentials": true
+    };
+    res.writeHead(200, headers);
+    res.end();
+  }
+});
 
 enum State {
   notStarted = 0, czarTurn = 1, typing = 2, choosing = 3, paused = 4
@@ -13,7 +28,6 @@ enum State {
 enum ConnectionErrors {
   nameNotSet = 0
 }
-
 class Player {
   timesBeingCzar = 0;
   name: string;
@@ -108,10 +122,7 @@ class Room {
 }
 
 
-let distDir = __dirname + '/dist/';
-app.use(express.static(distDir));
 
-http.listen(process.env.PORT || 8080);
 let players: Player[] = [];
 let rooms: Room[] = [];
 
@@ -185,18 +196,24 @@ io_server.on('connection', function (socket) {
   socket.on('joinGame', (data, callback) => {
     const player = Player.getPlayer(players, socket.id);
     const room = Room.getRoomByHash(rooms, data.hash);
-    if (!player.isPlayerInGame(rooms) && room.players.length < room.maxPlayers) {
+    if (!room){
+      console.log("return to main")
+        socket.emit("returnToMain");
+    }
+    else {
+      if (!player.isPlayerInGame(rooms) && room.players.length < room.maxPlayers) {
 
 
-      player.ready = false;
-      player.points = 0;
-      room.players.push(player);
-      socket.leave('lobby');
-      socket.join(room.hash);
-      callback(room.toDTO());
-      io_server.to(room.hash).emit('updateState', room.toDTO());
-    } else {
-      callback({status: false, error: ConnectionErrors.nameNotSet});
+        player.ready = room.state !== State.notStarted;
+        player.points = 0;
+        room.players.push(player);
+        socket.leave('lobby');
+        socket.join(room.hash);
+        callback(room.toDTO());
+        io_server.to(room.hash).emit('updateState', room.toDTO());
+      } else {
+        callback({status: false, error: ConnectionErrors.nameNotSet});
+      }
     }
   });
   socket.on('leaveGame', (data) => {
@@ -278,9 +295,16 @@ io_server.on('connection', function (socket) {
       }
     }
   });
+  socket.on('chat', (data:any)=>{
+    const player = Player.getPlayer(players, socket.id);
+    const room = Room.getRoomWithPlayer(rooms, socket.id);
+    io_server.to(room.hash).emit("chatMessage", {"player":player.name,"msg":data.msg});
+  });
   socket.on('kick', (data) => {
     const player = Player.getPlayer(players, socket.id);
     const room = Room.getRoomWithPlayer(rooms, socket.id);
+    console.log("1. kick");
+
     if (room.isPlayerAnAdmin(socket.id)) {
       const foundPlayer = room.players.filter(d => d.id === data.id)[0];
       if (foundPlayer.isCzar) {
@@ -291,7 +315,9 @@ io_server.on('connection', function (socket) {
       }
       foundPlayer.ready = false;
       foundPlayer.points = 0;
+
       room.players = room.players.filter(d => d.id !== data.id);
+      io_server.to(data.id).emit("returnToMain");
       updateRoom(room);
       updateRooms(rooms);
     }

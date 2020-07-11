@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {PlayerService} from '../../player.service';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-name-prompt',
@@ -25,7 +26,7 @@ export class NamePromptComponent implements OnInit {
   nameInput = '';
   minLen = 2;
   @Output() nameChangedEvent:EventEmitter<boolean> = new EventEmitter()
-  constructor(private pService:PlayerService ){ }
+  constructor(private pService:PlayerService,private route: ActivatedRoute){ }
 
   ngOnInit() {
   }
@@ -35,6 +36,10 @@ export class NamePromptComponent implements OnInit {
     if (this.nameInput.length>=this.minLen){
       this.pService.changeName(this.nameInput);
       this.nameChangedEvent.emit();
+      const id = this.route.snapshot.paramMap.get('room');
+      if(id){
+        window.location.reload();
+      }
     }
   }
 

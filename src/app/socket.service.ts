@@ -15,7 +15,7 @@ export class SocketService {
   public rooms: Room[] = [];
   @Output() roomUpdated: EventEmitter<any> = new EventEmitter();
   constructor(private router: Router) {
-    SERVER_URL = isDevMode() ? 'https://abbreviation.herokuapp.com' : 'https://abbreviation.herokuapp.com';
+    SERVER_URL = isDevMode() ? 'http://localhost:80' : 'https://abbreviation.herokuapp.com';
     this.initSocket();
   }
   public initSocket(): void {
@@ -25,6 +25,10 @@ export class SocketService {
       console.log(data);
       this.rooms = data;
       this.roomUpdated.emit();
+    });
+    this.socket.on("returnToMain", (d)=>{
+      console.log("return")
+      this.router.navigate([''])
     });
   }
   public makeGame(name, hidden, maxPlayers) {
@@ -54,5 +58,7 @@ export class SocketService {
   public joinRoom(hash, callback) {
     this.socket.emit('joinGame', {hash: hash}, callback );
   }
-
+  public kick(player){
+    this.socket.emit("kick", player, (d)=>{});
+  }
 }
