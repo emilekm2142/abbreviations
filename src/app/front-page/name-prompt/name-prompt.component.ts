@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 @Component({
   selector: 'app-name-prompt',
   templateUrl: './name-prompt.component.html',
-  styleUrls: ['./name-prompt.component.scss'],
+  styleUrls: ['./name-prompt.component.css'],
   animations: [
     trigger(
       'btnAnimation', [

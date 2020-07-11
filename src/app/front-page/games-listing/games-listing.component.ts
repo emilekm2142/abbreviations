@@ -5,7 +5,7 @@ import {SocketService} from '../../socket.service';
 @Component({
   selector: 'app-games-listing',
   templateUrl: './games-listing.component.html',
-  styleUrls: ['./games-listing.component.scss']
+  styleUrls: ['./games-listing.component.css']
 })
 export class GamesListingComponent implements OnInit {
   @Input() games:Room[];

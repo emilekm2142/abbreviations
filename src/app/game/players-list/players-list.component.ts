@@ -8,7 +8,7 @@ import {SocketService} from '../../socket.service';
 @Component({
   selector: 'app-players-list',
   templateUrl: './players-list.component.html',
-  styleUrls: ['./players-list.component.scss']
+  styleUrls: ['./players-list.component.css']
 })
 export class PlayersListComponent implements OnInit {
   @Input() players:Player[];

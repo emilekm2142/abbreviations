@@ -15,7 +15,7 @@ class ChatMessage{
 @Component({
   selector: 'app-game-page',
   templateUrl: './game-page.component.html',
-  styleUrls: ['./game-page.component.scss'],
+  styleUrls: ['./game-page.component.css'],
   animations: [
     trigger(
       'enterAnimation', [
